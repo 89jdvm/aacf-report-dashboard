@@ -138,6 +138,19 @@
   .arch-col ul { margin: 0; padding-left: 20px; color: var(--ink-soft); font-size: 14px; }
   .arch-col li { margin-bottom: 6px; }
 
+  /* company table */
+  .table-wrap { overflow-x: auto; margin: 18px 0; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .company-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .company-table th { background: var(--surface-2); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; padding: 12px 14px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--line); }
+  .company-table td { padding: 11px 14px; border-bottom: 1px solid var(--line-soft); color: var(--ink-soft); vertical-align: top; }
+  .company-table td.co { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  .company-table td.grp { white-space: nowrap; }
+  .company-table td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .company-table tbody tr:last-child td { border-bottom: none; }
+  .company-table tbody tr:hover { background: var(--surface); }
+  .company-table .status-ok { color: var(--ok); font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap; }
+  .company-table .status-draft { color: var(--warn); font-family: var(--font-mono); font-size: 11.5px; white-space: nowrap; }
+
   .callout { background: var(--surface-2); border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 10px; padding: 16px 20px; margin-top: 16px; }
   .callout p { font-size: 14.5px; }
 
@@ -255,55 +268,41 @@
       <h2>Grouping the companies: still not settled</h2>
     </div>
     <p>The point of the archetypes is to understand how the market actually breaks down, spot where companies could work together, and help decide where the fund should invest. Rick's framework, from the July 23 call: upstream, downstream, companies that support the chain without buying or selling cacao themselves, a real cluster that's vertically integrated, and an open bucket for anything that doesn't fit cleanly.</p>
-    <p>Here's a first pass at sorting the actual pipeline into it. This is a draft to react to, not a final answer.</p>
+    <p>Here's a first pass at sorting the actual pipeline into it, with the numbers that matter for financial rigor next to each one. This is a draft to react to, not a final answer.</p>
 
-    <div class="finding">
-      <h3>Vertically integrated: buys directly from farmers, sells a finished or branded product</h3>
-      <div class="arch-col">
-        <ul>
-          <li><strong>Choba Choba</strong>, Rick's own example, its cacao goes into Felchlin's Grand Cru line as a semi-finished ingredient</li>
-          <li><strong>GoodSAM Foods</strong>, owns no farms or factories, but controls sourcing, quality, and the brand end to end</li>
-          <li><strong>Rights Chocolate</strong>, owns its own factory, sells its own branded bars</li>
-          <li><strong>Ancestral Organics</strong>, buys from 254 smallholders, sells 30 plus branded SKUs</li>
-          <li><strong>Sumar Limitada, Chocolate Baure</strong>, buys wild harvest cacao, sells only finished product under its own brand</li>
-          <li><strong>Kamm</strong>, buys from 48 Chachi families, makes and sells its own chocolate and byproduct line</li>
-          <li><strong>Cacao Bisiesto</strong>, owns its own farm and trades on top of it</li>
-          <li><strong>República del Cacao</strong>, same pattern, though it can't take direct investment since it's part of Groupe Savencia</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="finding">
-      <h3>Chain support: helps the chain work without buying or selling cacao itself</h3>
-      <div class="arch-col">
-        <ul>
-          <li><strong>Hola Tractor</strong>, Rick's own example, a tractor marketplace that never touches the crop</li>
-          <li><strong>Ecuanibs</strong>, draft call, worth checking with Rick directly: it owns no land or processing and earns a flat commission connecting associations to chocolate makers, closer to a broker than a buyer or seller</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="finding">
-      <h3>Downstream, still fuzzy, worth pinning down together</h3>
-      <div class="arch-col">
-        <ul>
-          <li><strong>Conexión Chocolate</strong>, buys from cooperatives and tolls out its manufacturing, but sells under its own brand. This is the company Rick flagged as mislabeled, we haven't settled where it actually sits</li>
-          <li><strong>Franchy</strong>, processes cacao and most likely sells to other chocolate makers rather than running its own consumer brand, needs confirming</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="finding">
-      <h3>Reference example, not live pipeline</h3>
-      <div class="arch-col">
-        <ul>
-          <li><strong>Uncommon Cacao</strong>, the company Rick used on the call to describe pure midstream trading. Already a case study rather than a live deal, since it's merging into Silva</li>
-        </ul>
-      </div>
+    <div class="table-wrap">
+      <table class="company-table">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Group</th>
+            <th>Country</th>
+            <th>Revenue</th>
+            <th>Capital ask</th>
+            <th>Likely instrument</th>
+            <th>Placement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="co">Choba Choba</td><td class="grp">Vertically integrated</td><td>Peru</td><td class="num">~$1M/yr, ~$3M in accumulated losses on the books</td><td class="num">~$150k over 3 years</td><td>Debt or grant</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">GoodSAM Foods</td><td class="grp">Vertically integrated</td><td>Peru</td><td class="num">~$15M/yr</td><td class="num">$2M ask, but a 3 to 5 year loan fits the timing better</td><td>Unsecured loan</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">Rights Chocolate</td><td class="grp">Vertically integrated</td><td>Ecuador</td><td class="num">~$400k/yr</td><td class="num">~$2M, not fully sized yet</td><td>Working capital</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">Ancestral Organics</td><td class="grp">Vertically integrated</td><td>Colombia</td><td class="num">~$250k/yr, targeting $2.5M in 3 years</td><td class="num">~$560k, closing now</td><td>Revenue-based debt</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">Sumar Limitada, Chocolate Baure</td><td class="grp">Vertically integrated</td><td>Bolivia</td><td>Not stated</td><td class="num">$250k to $1M per month</td><td>Working capital, closed to equity</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">Kamm</td><td class="grp">Vertically integrated</td><td>Ecuador</td><td class="num">~$500k/yr, self-reported, unconfirmed</td><td>Not sized</td><td>Unclear, no finance contact yet</td><td class="status-ok">Group confirmed, finance lead missing</td></tr>
+          <tr><td class="co">Cacao Bisiesto</td><td class="grp">Vertically integrated</td><td>Nicaragua, benchmark only</td><td class="num">~$300k/yr</td><td class="num">~$150k revolving plus ~$40 to 50k capex</td><td>Working capital and equipment debt</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">República del Cacao</td><td class="grp">Vertically integrated</td><td>Ecuador</td><td>Not stated, part of Groupe Savencia</td><td>Not sized, can't take direct investment</td><td>None, technical and offtake partner only</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">Hola Tractor</td><td class="grp">Chain support</td><td>Bolivia, Peru, Ecuador</td><td>Not stated</td><td class="num">$500k, live round</td><td>Equity or SAFE</td><td class="status-ok">Confirmed</td></tr>
+          <tr><td class="co">Ecuanibs</td><td class="grp">Chain support</td><td>Ecuador</td><td>Not stated</td><td>Not sized</td><td>Unclear</td><td class="status-draft">Draft, check with Rick</td></tr>
+          <tr><td class="co">Conexión Chocolate</td><td class="grp">Downstream</td><td>Ecuador, US</td><td>Not stated</td><td>Not sized, capex to build owned manufacturing</td><td>Likely debt</td><td class="status-draft">Draft, check with Rick</td></tr>
+          <tr><td class="co">Franchy</td><td class="grp">Downstream</td><td>Ecuador</td><td class="num">~$60 to 70k/yr</td><td class="num">~$150 to 200k, already self-funded</td><td>Equipment debt</td><td class="status-draft">Draft, check with Rick</td></tr>
+          <tr><td class="co">Uncommon Cacao</td><td class="grp">Reference, not live pipeline</td><td>Merging into Silva</td><td>Not applicable</td><td>Not applicable</td><td>Not applicable</td><td class="status-draft">Case study only</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="callout">
-      <p><strong>Nothing here is locked yet.</strong> Nuna Labs and ARCASY still aren't represented, we're missing meeting notes for both. Conexión and Franchy need a real answer, not a guess. We need a dedicated session to define these categories properly and check every company against them, before the July 27 call with Rick.</p>
+      <p><strong>Nothing here is locked yet.</strong> Nuna Labs and ARCASY aren't in this table at all, we're missing meeting notes for both. Conexión and Franchy need a real answer, not a guess, and Kamm needs a finance contact before its capital ask can be sized. We need a dedicated session to define these categories properly and check every company against them, before the July 27 call with Rick.</p>
     </div>
   </section>
 
