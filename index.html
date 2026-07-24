@@ -1,0 +1,311 @@
+<title>Phase Zero Report: How It's Built</title>
+<style>
+  :root {
+    --font-display: "Charter","Bitstream Charter","Sitka Text",Georgia,"Times New Roman",serif;
+    --font-body: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono: ui-monospace,"SFMono-Regular","Cascadia Code",Menlo,Consolas,monospace;
+
+    --bg: #EBEEE9;
+    --surface: #F7F8F5;
+    --surface-2: #FDFDFB;
+    --ink: #19201D;
+    --ink-soft: #48524D;
+    --ink-faint: #717B76;
+    --line: #D6DBD2;
+    --line-soft: #E3E7DF;
+    --accent: #0E6E7D;
+    --accent-ink: #0A5763;
+    --accent-bg: rgba(14,110,125,.10);
+
+    --ok: #3C8A56;      --ok-bg: rgba(60,138,86,.13);
+    --warn: #A9750F;    --warn-bg: rgba(182,123,30,.15);
+    --new: #6E4E9E;     --new-bg: rgba(110,78,158,.13);
+    --defer: #6E7873;   --defer-bg: rgba(110,120,115,.14);
+
+    --shadow: 0 1px 2px rgba(20,30,25,.05), 0 6px 20px rgba(20,30,25,.05);
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111514;
+      --surface: #181D1B;
+      --surface-2: #1E2422;
+      --ink: #E7EBE7;
+      --ink-soft: #AEB6B1;
+      --ink-faint: #828B86;
+      --line: #2B322F;
+      --line-soft: #232927;
+      --accent: #40B7C7;
+      --accent-ink: #82D6E0;
+      --accent-bg: rgba(64,183,199,.13);
+
+      --ok: #62B77E;    --ok-bg: rgba(95,181,124,.16);
+      --warn: #D8A73F;  --warn-bg: rgba(216,167,63,.16);
+      --new: #B79EDD;   --new-bg: rgba(183,158,221,.16);
+      --defer: #828B86; --defer-bg: rgba(131,140,135,.16);
+
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 22px rgba(0,0,0,.32);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #EBEEE9; --surface: #F7F8F5; --surface-2: #FDFDFB;
+    --ink: #19201D; --ink-soft: #48524D; --ink-faint: #717B76;
+    --line: #D6DBD2; --line-soft: #E3E7DF;
+    --accent: #0E6E7D; --accent-ink: #0A5763; --accent-bg: rgba(14,110,125,.10);
+    --ok: #3C8A56; --ok-bg: rgba(60,138,86,.13);
+    --warn: #A9750F; --warn-bg: rgba(182,123,30,.15);
+    --new: #6E4E9E; --new-bg: rgba(110,78,158,.13);
+    --defer: #6E7873; --defer-bg: rgba(110,120,115,.14);
+    --shadow: 0 1px 2px rgba(20,30,25,.05), 0 6px 20px rgba(20,30,25,.05);
+  }
+  :root[data-theme="dark"] {
+    --bg: #111514; --surface: #181D1B; --surface-2: #1E2422;
+    --ink: #E7EBE7; --ink-soft: #AEB6B1; --ink-faint: #828B86;
+    --line: #2B322F; --line-soft: #232927;
+    --accent: #40B7C7; --accent-ink: #82D6E0; --accent-bg: rgba(64,183,199,.13);
+    --ok: #62B77E; --ok-bg: rgba(95,181,124,.16);
+    --warn: #D8A73F; --warn-bg: rgba(216,167,63,.16);
+    --new: #B79EDD; --new-bg: rgba(183,158,221,.16);
+    --defer: #828B86; --defer-bg: rgba(131,140,135,.16);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 22px rgba(0,0,0,.32);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+    font-size: 16px;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--accent-ink); font-weight: 600;
+  }
+  h1 {
+    font-family: var(--font-display); font-weight: 650;
+    font-size: clamp(28px, 4vw, 42px); line-height: 1.1; margin: 10px 0 12px;
+    letter-spacing: -.01em; text-wrap: balance;
+  }
+  .lede { font-size: clamp(16px,2vw,18px); color: var(--ink-soft); max-width: 62ch; margin: 0; }
+  .meta-line { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); margin-top: 16px; }
+
+  h2 {
+    font-family: var(--font-display); font-weight: 640; font-size: clamp(20px,2.4vw,25px);
+    letter-spacing: -.005em; margin: 0; text-wrap: balance;
+  }
+  .section { margin-top: 56px; }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+  .section-num { font-family: var(--font-mono); font-size: 13px; color: var(--accent); font-weight: 600; }
+  p { margin: 0 0 14px; color: var(--ink-soft); font-size: 15.5px; max-width: 68ch; }
+  p:last-child { margin-bottom: 0; }
+  p strong { color: var(--ink); }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); }
+
+  /* facts list */
+  .facts { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 0; }
+  .fact { padding: 16px 20px 16px 0; border-bottom: 1px solid var(--line-soft); }
+  .fact:nth-last-child(-n+2) { border-bottom: none; }
+  .fact .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-faint); }
+  .fact .v { margin-top: 5px; font-size: 14.5px; color: var(--ink); }
+
+  /* the honesty rule example */
+  .rule-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin: 18px 0; }
+  .rule-step { background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+  .rule-step .k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px; }
+  .rule-step p { font-size: 14px; margin: 0; }
+  @media (max-width: 680px) { .rule-steps { grid-template-columns: 1fr; } }
+  .finding { margin: 22px 0; }
+  .finding h3 { font-family: var(--font-display); font-size: 15.5px; font-weight: 620; margin: 0 0 10px; color: var(--ink); }
+
+  /* eight sections list */
+  .sections-list { display: grid; gap: 8px; }
+  .slist-row { display: grid; grid-template-columns: 32px 1fr auto; gap: 16px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; }
+  .slist-row .snum { font-family: var(--font-display); font-weight: 650; color: var(--accent-ink); font-size: 17px; }
+  .slist-row .sname { font-weight: 600; color: var(--ink); font-size: 15px; }
+  .slist-row .sdesc { color: var(--ink-soft); font-size: 13.5px; margin-top: 2px; }
+  @media (max-width: 640px) { .slist-row { grid-template-columns: 28px 1fr; } }
+
+  .pill { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; letter-spacing: .04em; padding: 4px 10px; border-radius: 20px; white-space: nowrap; display: inline-block; }
+  .pill.ok { color: var(--ok); background: var(--ok-bg); }
+  .pill.warn { color: var(--warn); background: var(--warn-bg); }
+  .pill.new { color: var(--new); background: var(--new-bg); }
+  .pill.defer { color: var(--defer); background: var(--defer-bg); }
+
+  /* archetype list */
+  .arch-col ul { margin: 0; padding-left: 20px; color: var(--ink-soft); font-size: 14px; }
+  .arch-col li { margin-bottom: 6px; }
+
+  .callout { background: var(--surface-2); border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: 10px; padding: 16px 20px; margin-top: 16px; }
+  .callout p { font-size: 14.5px; }
+
+  /* stat row */
+  .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin: 18px 0; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; }
+  .stat .n { font-family: var(--font-display); font-size: 32px; font-weight: 650; color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+  .stat .t { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-top: 2px; }
+  .stat .d { font-size: 12.5px; color: var(--ink-soft); margin-top: 6px; }
+  @media (max-width: 680px) { .stats { grid-template-columns: 1fr; } }
+
+  /* next steps */
+  .next-list { display: grid; gap: 8px; }
+  .next-row { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 9px; padding: 12px 16px; }
+  .next-row .item { font-size: 14.5px; color: var(--ink); }
+  .next-row .who { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); }
+  @media (max-width: 640px) { .next-row { grid-template-columns: 1fr; } .next-row .who { justify-self: start; } }
+
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--ink-faint); }
+  footer code { font-family: var(--font-mono); font-size: 11.5px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">AACF Phase Zero, Enterprise Report</div>
+    <h1>How the report is built</h1>
+    <p class="lede">A walkthrough of the report's structure and the logic behind it, updated after the July 23 review with Rick and Deme. Same shape we walked through live on that call, with what changed since.</p>
+    <div class="meta-line">Updated July 24, 2026</div>
+  </header>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>What this report is for</h2>
+    </div>
+    <div class="card facts">
+      <div class="fact"><div class="k">What it is</div><div class="v">The key findings memo for the enterprise interviews. A separate memo covers the meta-mapping work.</div></div>
+      <div class="fact"><div class="k">Who reads it</div><div class="v">Investors and LPs, our own team, and the CPI grant reviewers.</div></div>
+      <div class="fact"><div class="k">The question it answers</div><div class="v">Is there a real fundable pipeline here, and what capital do these companies actually need?</div></div>
+      <div class="fact"><div class="k">Timeline</div><div class="v">Outline with Rick on July 27, full draft July 31, Justin's edit pass the week after.</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>The rule behind every finding</h2>
+    </div>
+    <p>Justin's ask: every finding in the report has to show its work. Not just a headline number, but where it came from and what's still unknown. Three parts: the raw data, what we make of it, and the question it leaves open. A few of the findings built this way so far:</p>
+
+    <div class="finding">
+      <h3>Processing capacity often sits idle</h3>
+      <div class="rule-steps">
+        <div class="rule-step"><div class="k">Raw data</div><p>Processing capacity is usually rented, not owned, and often sits unused.</p></div>
+        <div class="rule-step"><div class="k">Analysis</div><p>This came from Claude's read of the interviews, and it matched Deme's own analysis independently.</p></div>
+        <div class="rule-step"><div class="k">Open question</div><p>Some of this could turn into new products, mucilage came up, but we don't know if there's a market for it yet.</p></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <h3>Owning your own manufacturing is the exception, not the rule</h3>
+      <div class="rule-steps">
+        <div class="rule-step"><div class="k">Raw data</div><p>Choba Choba doesn't make its own chocolate, Conexión tolls out all of its manufacturing, and Rights Chocolate, which does own a factory, uses only 10 to 20 percent of it.</p></div>
+        <div class="rule-step"><div class="k">Analysis</div><p>Owning processing capacity is rare across this pipeline, and where it exists it's often underused rather than fully needed.</p></div>
+        <div class="rule-step"><div class="k">Open question</div><p>Could Rights Chocolate's spare capacity actually serve smaller players like Kamm? We haven't mapped total capacity across the pipeline to check yet.</p></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <h3>Amazon sourcing is real, but only partial</h3>
+      <div class="rule-steps">
+        <div class="rule-step"><div class="k">Raw data</div><p>Only about six of the companies we interviewed currently source directly from Amazon basin regions. Several strong candidates source from elsewhere in the same four countries.</p></div>
+        <div class="rule-step"><div class="k">Analysis</div><p>Amazon sourcing is a real thread through the pipeline, but it's the exception among the companies we've talked to so far, not the norm.</p></div>
+        <div class="rule-step"><div class="k">Open question</div><p>How strict should the Amazon-sourcing bar be? Ancestral Organics stayed in the pipeline because its Amazon pilot is about a year out. That was a judgment call, not a written rule yet.</p></div>
+      </div>
+    </div>
+
+    <div class="finding">
+      <h3>Vertical integration means control, not ownership</h3>
+      <div class="rule-steps">
+        <div class="rule-step"><div class="k">Raw data</div><p>GoodSAM owns no farms and no factories anywhere in its supply chain.</p></div>
+        <div class="rule-step"><div class="k">Analysis</div><p>Under an ownership test, GoodSAM looks like a weak fit. Under a control test, setting sourcing terms, quality standards, and owning the buyer relationship, it's one of the most integrated companies in the pipeline. Rick pushed us to recode it this way.</p></div>
+        <div class="rule-step"><div class="k">Open question</div><p>Has the master sheet actually been recoded under this new definition for every company yet? Not confirmed.</p></div>
+      </div>
+    </div>
+
+    <p>Rick tested the structure live against the processing example and it held. His words: "I like the structure. That's validated." One change made on the call: the middle column used to be called "reading." Rick pointed out Claude is actually interpreting the data, not just summarizing it, so we're calling it "analysis" now.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>The eight sections</h2>
+    </div>
+    <div class="eyebrow" style="margin-bottom:10px">The core document, goes to investors and LPs</div>
+    <div class="sections-list">
+      <div class="slist-row"><div class="snum">1</div><div><div class="sname">Introduction</div><div class="sdesc">What this document is and what it's trying to show.</div></div></div>
+      <div class="slist-row"><div class="snum">2</div><div><div class="sname">Methodology</div><div class="sdesc">How we actually did this work, from the start of Phase Zero to now. Michelle asked for this specifically.</div></div></div>
+      <div class="slist-row"><div class="snum">3</div><div><div class="sname">Findings and conclusions</div><div class="sdesc">The heart of the report. The big picture, not a company-by-company rundown, organized by archetype (see below).</div></div></div>
+      <div class="slist-row"><div class="snum">4</div><div><div class="sname">Implications for AACF's design</div><div class="sdesc">What the findings mean for how the fund should actually be built, blended finance, grant versus fund fit, that kind of thing.</div></div></div>
+      <div class="slist-row"><div class="snum">5</div><div><div class="sname">Pipeline</div><div class="sdesc">Short case studies of the companies worth a closer look, grouped by archetype.</div></div></div>
+      <div class="slist-row"><div class="snum">8</div><div><div class="sname">Conclusion</div><div class="sdesc">Does a real pipeline exist, and what would it look like for AACF.</div></div></div>
+    </div>
+    <div class="eyebrow" style="margin:22px 0 10px">The addendum, internal only</div>
+    <div class="sections-list">
+      <div class="slist-row"><div class="snum">6</div><div><div class="sname">Lessons learned</div><div class="sdesc">What we'd do differently next round. This one's for us.</div></div></div>
+      <div class="slist-row"><div class="snum">7</div><div><div class="sname">Next steps</div><div class="sdesc">Where the work goes from here.</div></div></div>
+    </div>
+    <p style="margin-top:14px">Decided on the July 23 call: the core document, sections 1 through 5 plus the conclusion, is what goes to investors and LPs. Lessons learned and next steps stay together as an internal addendum, honest about where we fell short and what's coming next, without needing outside framing.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Grouping the companies: still not settled</h2>
+    </div>
+    <p>The point of the archetypes is to understand how the market actually breaks down, spot where companies could work together, and help decide where the fund should invest. Rick's framework, from the July 23 call:</p>
+    <div class="arch-col">
+      <ul>
+        <li>Three main groups: upstream, downstream, and companies that support the chain without buying or selling cacao themselves</li>
+        <li>That third group is barely represented yet: one interview outside the direct supply chain so far (Hola Tractor), nothing at all in logistics, cold storage, data tools, or microcredit</li>
+        <li>A real cluster on top of that is vertically integrated: buys directly from farmers, sells a finished or branded product, doesn't sit cleanly in one lane (Choba Choba is the clearest example)</li>
+        <li>An open category has to stay for companies that don't fit cleanly. Rick was direct about this: real companies keep getting missed when we try to force a clean fit</li>
+      </ul>
+    </div>
+    <div class="callout">
+      <p><strong>Nothing here is locked yet.</strong> Nuna Labs and ARCASY still aren't represented, we're missing meeting notes for both. We need a dedicated session to define these categories properly and check every company against them, before the July 27 call with Rick.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2>The honest numbers</h2>
+    </div>
+    <p>An earlier count of "19 completed interviews" doesn't hold up. It came from Deme's pass over the Excel matrix, which is narrower than the full set of interviews we've actually done. Here's what's real:</p>
+    <div class="stats">
+      <div class="stat"><div class="n">22+</div><div class="t">Companies engaged</div><div class="d">Some kind of real response or interview, including a few that dropped off.</div></div>
+      <div class="stat"><div class="n">20</div><div class="t">Interviews with real insight</div><div class="d">Cacao Hunters isn't a strong fit for the fund but the interview still counts here.</div></div>
+      <div class="stat"><div class="n">~12</div><div class="t">In the active pipeline</div><div class="d">The companies worth real diligence right now.</div></div>
+    </div>
+    <p>Rick raised a new point on the call: even "20 companies with real insight" is just a count he doesn't fully trust yet. One company might have fifteen distinct insights behind it, another might have one. He wants to actually see what's behind each company's number before we quote it anywhere.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2>New this week: a profile for every company</h2>
+    </div>
+    <p>Idea from the call: one document per company covering its archetype, key insights, location, and capital needs, so nobody has to go dig through the spreadsheet. Rick expanded it into three formats: a three to five page profile, a longer ten page case study for lessons learned, and a shorter one-pager.</p>
+    <p>His point about it, worth keeping in mind: the value isn't that we can generate these fast now. It's that actually writing one forces you to notice what you don't know yet and go back and ask.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2>What's happening next</h2>
+    </div>
+    <div class="next-list">
+      <div class="next-row"><span class="pill warn">Top of the list</span><div class="item">Define the archetypes properly, before the July 27 call with Rick</div><div class="who">Team</div></div>
+      <div class="next-row"><span class="pill new">New</span><div class="item">Build the per-company profiles</div><div class="who">JD</div></div>
+      <div class="next-row"><span class="pill warn">In progress</span><div class="item">Rebuild the full database analysis run, lost twice now to computer problems</div><div class="who">JD</div></div>
+      <div class="next-row"><span class="pill warn">In progress</span><div class="item">Show the specific insight behind each company's count, not just the total</div><div class="who">JD</div></div>
+      <div class="next-row"><span class="pill defer">Not urgent</span><div class="item">Get the Nuna Labs and ARCASY notes from Rick</div><div class="who">Rick</div></div>
+    </div>
+  </section>
+
+  <footer>
+    Sources: <code>calls/team/2026-07-23_report-draft-review.md</code>, <code>calls/DECISIONS.md</code>, <code>deliverables/phase_zero_report_skeleton_2026-07-22.md</code>.
+  </footer>
+</div>
