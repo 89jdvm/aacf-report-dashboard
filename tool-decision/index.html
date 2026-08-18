@@ -44,10 +44,12 @@ h1{font-weight:900;text-transform:uppercase;letter-spacing:-0.01em;line-height:0
   font-size:3.40rem;margin:0 0 24px;text-wrap:balance;color:var(--ink)}
 h2{font-weight:900;font-size:1.50rem;line-height:1.1;margin:0 0 16px;
   text-wrap:balance;color:var(--ink);letter-spacing:-0.01em}
-h3{font-weight:700;font-size:0.95rem;margin:24px 0 8px;color:var(--primary)}
+h3{font-weight:700;font-size:1.15rem;margin:32px 0 8px;color:var(--ink);letter-spacing:-0.01em}
+h4{font-weight:700;font-size:0.95rem;margin:24px 0 8px;color:var(--primary)}
 p{margin:0 0 12px;max-width:62ch}
 .lead{font-weight:600;font-size:1.15rem;line-height:1.25;max-width:56ch;margin:0 0 16px}
 .deck{font-weight:400;font-size:1.15rem;line-height:1.35;max-width:58ch;color:var(--ink-soft);margin:0 0 8px}
+.oneline{font-weight:600;font-size:1.15rem;line-height:1.25;max-width:58ch;margin:0 0 12px;color:var(--ink)}
 strong{font-weight:700}
 blockquote{margin:16px 0;padding-left:24px;border-left:2.5px solid var(--primary);max-width:58ch}
 blockquote p{font-weight:600;font-size:1.15rem;line-height:1.3;margin:0}
@@ -60,8 +62,12 @@ th{text-align:left;font-weight:700;text-transform:uppercase;font-size:0.70rem;
   border-bottom:1.5px solid var(--primary);vertical-align:bottom}
 td{padding:12px 16px 12px 0;border-bottom:1px solid var(--hairline);vertical-align:top}
 td.num{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
-ul{margin:0 0 12px;padding-left:18px;max-width:62ch}
+ul,ol{margin:0 0 12px;padding-left:20px;max-width:62ch}
 li{margin-bottom:8px}
+.steps{list-style:none;padding-left:0;counter-reset:s;max-width:62ch}
+.steps li{counter-increment:s;position:relative;padding-left:36px;margin-bottom:12px}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;
+  font-weight:900;font-variant-numeric:tabular-nums;color:var(--primary);font-size:0.95rem}
 .plain{max-width:64ch}
 .plain dt{font-weight:700;margin-top:16px;font-size:0.95rem}
 .plain dd{margin:4px 0 0;color:var(--ink);max-width:60ch}
@@ -69,6 +75,12 @@ li{margin-bottom:8px}
   border-left:2.5px solid var(--primary);max-width:64ch}
 .note p{margin:0;font-size:0.80rem;line-height:1.45}
 .note p+p{margin-top:8px}
+.ex{border-left:1.5px solid var(--hairline);padding:0 0 0 24px;margin:20px 0;max-width:62ch}
+.ex .tag{display:block;font-size:0.70rem;letter-spacing:0.14em;text-transform:uppercase;
+  font-weight:700;color:var(--primary);margin-bottom:8px}
+.ex p{font-size:0.80rem;line-height:1.5;margin:0 0 8px}
+.ex p:last-child{margin-bottom:0}
+.ex .spread{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
 .verdict{border-left:2.5px solid var(--accent);padding:8px 0 8px 24px;margin:24px 0}
 .verdict .lead{margin-bottom:8px}
 .req td.tick{width:56px;font-weight:900;font-size:1.15rem;color:var(--accent-ink);
@@ -81,6 +93,13 @@ li{margin-bottom:8px}
 .tools .best{color:var(--accent-ink)}
 .tools .mid{color:var(--ink)}
 .tools .no{color:var(--ink-soft)}
+.qs td.n{width:40px;font-weight:900;font-variant-numeric:tabular-nums;color:var(--primary);
+  font-size:1.15rem;line-height:1.2}
+.qs td.q{width:52%;padding-right:32px}
+.qs td.q .say{font-weight:600;font-size:0.95rem;line-height:1.35;color:var(--ink);display:block}
+.qs td.q .topic{display:block;font-size:0.70rem;letter-spacing:0.14em;text-transform:uppercase;
+  font-weight:700;color:var(--primary);margin-bottom:6px}
+.qs td.why{color:var(--ink-soft)}
 .src{font-size:0.70rem;color:var(--ink-soft);line-height:1.6;max-width:70ch}
 .src a{color:var(--primary)}
 a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -119,7 +138,7 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
       <p class="lead">Understand the state of the bioeconomy in the Andean Amazon, using the studies that already exist, so the fund can act.</p>
       <p>Everyone in this ecosystem holds studies, published and unpublished, and the information is scattered across them. No single organisation can see the whole picture. This memo combines what they hold into one view, and is honest about where that view is solid and where it is thin.</p>
 
-      <h3>What it has to deliver</h3>
+      <h4>What it has to deliver</h4>
       <ul>
         <li>The funnel: how many organisations we asked, how many replied, how many sent material</li>
         <li>A characterization of what they gave us</li>
@@ -140,24 +159,37 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   <div class="row">
     <div class="lbl">The method</div>
     <div>
-      <h2>The method follows from that objective</h2>
-      <p>Read that list and two different jobs fall out of it. One is about the evidence itself: what exists, who made it, what it covers, what it misses. The other is about what the evidence says once you put it together. Those need two published methods, and they stack.</p>
+      <h2>Two jobs, two methods</h2>
+      <p>The list above contains two different jobs. One is about the evidence itself: what exists, who made it, what it covers, what it misses. The other is about what the evidence says once you put it together. Each has a published method built for it.</p>
 
-      <h3>One. A systematic evidence map</h3>
-      <p>Campbell Collaboration and 3ie guidance. In plain terms, a structured table of what we hold and what is missing. Value chains down one side, countries across the top, gaps marked. It is built for the question of what evidence exists on what, and it produces the fragmentation diagnosis as a by-product rather than as an essay. <strong>We already built one.</strong> The coverage table is it.</p>
+      <h3>One. Evidence map</h3>
+      <p class="oneline">A map of what we hold and what we are missing.</p>
+      <p>Value chains down one side, countries across the top, a count in each box. Empty boxes are the gaps. It answers what exists, before anyone asks what it says. Campbell Collaboration and 3ie guidance, free and citable. <strong>We already built one.</strong> The coverage table is it.</p>
+      <div class="ex">
+        <span class="tag">What that looks like for us</span>
+        <p>Cacao appears in <span class="spread">81 of our 106 files</span>. Other chains appear in a handful, and some country and chain combinations appear in none at all.</p>
+        <p>The map turns that from an impression into a number, so the memo can state exactly where the evidence is thin rather than implying it. That is also the fragmentation section, produced as a by-product instead of written as an essay.</p>
+      </div>
 
       <h3>Two. Narrative synthesis</h3>
-      <p>Popay and colleagues, ESRC Methods Programme, 2006. This is the standard method for combining studies too different from each other to pool statistically, which is exactly our situation: reports, diagnostics, strategies and fact sheets, from different organisations, different years, different methods, mostly in Spanish.</p>
-      <p>It has four elements, and the third is the reason it fits us.</p>
-      <ul>
-        <li><strong>Theory development.</strong> What we expect to find and why, stated up front.</li>
-        <li><strong>Preliminary synthesis.</strong> Tabulating and grouping what each source claims.</li>
-        <li><strong>Exploring relationships within and between studies.</strong> This is Michelle's overlap and contradiction question, and it is a named step of a published method rather than something we invented.</li>
-        <li><strong>Assessing robustness.</strong> How much weight the conclusions can carry. This is the caveats section.</li>
-      </ul>
+      <p class="oneline">A disciplined way to combine studies whose numbers cannot be added together.</p>
+      <p>Our documents come from different organisations, different years, different countries and different methods. You cannot average their figures. Averaging a survey of forty farmers with a national statistic produces a number that means nothing.</p>
+      <p>So instead you build the picture in words, in a fixed order, showing your working. That is all the word narrative means here: the answer is a reasoned account rather than a single pooled number. Popay and colleagues, ESRC Methods Programme, 2006. It has four steps.</p>
+      <ol class="steps">
+        <li>Say what you expect to find, before you look, so the goalposts cannot move later.</li>
+        <li>Put every study's claims into one table, so they sit side by side and can be compared.</li>
+        <li>Look at who agrees, who disagrees, and why they might differ.</li>
+        <li>Say how much weight the conclusion can carry, given the quality of what you have.</li>
+      </ol>
+      <div class="ex">
+        <span class="tag">Worked example, using real figures from our corpus</span>
+        <p>Ask our documents a simple question: what is a cacao yield in this region? They answer differently. Under 300 kg per hectare. Between 300 and 500. Between 150 and 200. Between 400 and 600. An average of 851. Cusco at 412. A reference figure of 1,400.</p>
+        <p>Averaging those would be dishonest. <strong>Step three</strong> asks why they differ: different countries, different years, and some of these are actual harvests while others are targets. <strong>Step four</strong> asks what we can still say for certain.</p>
+        <p>And the answer is a finding the fund can use. Reported cacao yields across the region's own studies differ by roughly <span class="spread">nine times</span>, so any financial model resting on one regional yield figure is standing on sand. That is worth far more than a fake average, and it came out of the disagreement rather than in spite of it.</p>
+      </div>
+
       <div class="note">
         <p><strong>A framework based method was considered and rejected.</strong> An earlier draft proposed mapping the documents onto the seven interview dimensions from the concept note. That was wrong. Those dimensions ask company level questions, such as which instrument a business would absorb, and you cannot ask that of a regional value chain diagnostic. It would also have blurred the line between this memo and the enterprise report, which the brief explicitly says to keep clean.</p>
-        <p>The questions we ask each document come from the list above, not from a framework borrowed from the other workstream.</p>
       </div>
     </div>
   </div>
@@ -175,11 +207,11 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
           <tr><td class="tick">&#10003;</td><td class="ask">The funnel</td><td class="how"><span>Evidence map</span>Standard reporting of how many were approached, replied and delivered, and what was excluded and why</td></tr>
           <tr><td class="tick">&#10003;</td><td class="ask">Characterization of what we received</td><td class="how"><span>Evidence map</span>Document type, chain, country, year and producing organisation, tabulated across the whole set</td></tr>
           <tr><td class="tick">&#10003;</td><td class="ask">The fragmentation problem</td><td class="how"><span>Evidence map, plus our overlap measurement</span>Gaps come straight off the coverage matrix. The 2,575 passages repeating across documents give the diagnosis hard evidence instead of adjectives</td></tr>
-          <tr><td class="tick">&#10003;</td><td class="ask">Chains with potential, and the biggest challenges</td><td class="how"><span>Narrative synthesis, element two</span>Tabulating and grouping what each source claims, so claims can be compared rather than quoted</td></tr>
-          <tr><td class="tick">&#10003;</td><td class="ask">Where sources overlap and contradict</td><td class="how"><span>Narrative synthesis, element three</span>Exploring relationships between studies is a named step of the method, not something we improvised</td></tr>
-          <tr><td class="tick">&#10003;</td><td class="ask">Which chains are most mature</td><td class="how"><span>Narrative synthesis, element three</span>Ranked on stated criteria, with the basis given for each so the ranking can be argued with</td></tr>
-          <tr><td class="tick">&#10003;</td><td class="ask">Risks, caveats and limitations</td><td class="how"><span>Narrative synthesis, element four</span>Assessing robustness is a required step, which is why caveats sit before the conclusions rather than in a footnote</td></tr>
-          <tr><td class="tick">&#10003;</td><td class="ask">Conclusions for investment</td><td class="how"><span>Narrative synthesis, element one</span>Theory stated up front, then tested against what the evidence actually supports</td></tr>
+          <tr><td class="tick">&#10003;</td><td class="ask">Chains with potential, and the biggest challenges</td><td class="how"><span>Narrative synthesis, step two</span>Every claim in one table, so chains can be compared rather than quoted one at a time</td></tr>
+          <tr><td class="tick">&#10003;</td><td class="ask">Where sources overlap and contradict</td><td class="how"><span>Narrative synthesis, step three</span>Looking at who agrees and who disagrees is a named step of a published method, not something we improvised</td></tr>
+          <tr><td class="tick">&#10003;</td><td class="ask">Which chains are most mature</td><td class="how"><span>Narrative synthesis, step three</span>Ranked on stated criteria, with the basis given for each so the ranking can be argued with</td></tr>
+          <tr><td class="tick">&#10003;</td><td class="ask">Risks, caveats and limitations</td><td class="how"><span>Narrative synthesis, step four</span>Weighing how much the conclusions can carry is a required step, which is why caveats sit before the conclusions rather than in a footnote</td></tr>
+          <tr><td class="tick">&#10003;</td><td class="ask">Conclusions for investment</td><td class="how"><span>Narrative synthesis, step one</span>What we expected stated up front, then tested against what the evidence actually supports</td></tr>
         </tbody>
       </table>
       </div>
@@ -190,28 +222,10 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <section>
   <div class="row">
-    <div class="lbl">The rules</div>
-    <div>
-      <h2>What we are allowed to do with AI</h2>
-      <p>Whatever the method, something has to read ninety six documents and mark where each one answers our questions. That will be AI. In 2025 the four bodies that set standards for this work, Cochrane, the Campbell Collaboration, JBI and the Collaboration for Environmental Evidence, jointly published rules for exactly that, called RAISE. Campbell is the same body behind the evidence map guidance above.</p>
-      <ul>
-        <li><strong>You may use AI</strong> to screen, read, mark and help synthesise.</li>
-        <li><strong>You owe two things in return.</strong> Say which AI you used and at which stage, and check its work by validating a sample by hand.</li>
-      </ul>
-      <p>It names no software at all.</p>
-      <div class="note">
-        <p><strong>This decides the tool question.</strong> Those two duties attach to AI making judgments, not to whose software runs it. They fall on us identically either way, so buying software removes none of the work.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="row">
     <div class="lbl">The tools</div>
     <div>
       <h2>Who does the marking</h2>
-      <p>The method above does not change with this choice. Only the machinery does.</p>
+      <p>Both methods need someone to read ninety six documents and mark where each one answers our questions. That will be AI either way. The method does not change with this choice, only the machinery does.</p>
       <div class="scroll">
       <table class="tools">
         <thead><tr><th>Option</th><th>Money</th><th>Time</th><th>Complexity</th><th>Reach</th><th>What it means for us</th></tr></thead>
@@ -267,6 +281,18 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         </tbody>
       </table>
       </div>
+
+      <h4>The same two duties apply to every row above</h4>
+      <p>Using AI to read and mark documents is allowed, and there are published rules for doing it honestly. In 2025 the four bodies that set standards for this kind of work, Cochrane, the Campbell Collaboration, JBI and the Collaboration for Environmental Evidence, issued them jointly. They are known as RAISE, and Campbell is the same body behind the evidence map above.</p>
+      <p>The rules say two things.</p>
+      <ol class="steps">
+        <li>Say which AI you used, and at which stage of the work.</li>
+        <li>Check its work, by marking a sample of passages by hand and reporting how often you and the AI agreed.</li>
+      </ol>
+      <div class="note">
+        <p><strong>This is what settles the table above.</strong> Those two duties attach to AI making judgments, not to whose software runs it. They fall on us identically whether we buy a tool or not, so buying one removes none of the work. It only adds the week of waiting and the smaller reach.</p>
+        <p>The rules name no software at all.</p>
+      </div>
       <div class="note">
         <p><strong>Assumption stated openly.</strong> MAXQDA publishes its limit in pages and never defines a page. The reach figures assume 1,800 characters per page against our measured 12.76 million characters of narrative documents. A more generous 2,500 characters changes the number of days but not the ranking.</p>
       </div>
@@ -280,10 +306,10 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div>
       <h2>What we recommend</h2>
       <div class="verdict">
-        <p class="lead">Run the meta study as a systematic evidence map plus narrative synthesis, with the marking done in house, and report the AI use under RAISE.</p>
-        <p>Add the validation step, about half a day, where we hand check a sample and report how often it agreed with the AI. That is what makes the method defensible to anyone who pushes on it, and it is a more rigorous thing to put in a methods note than a brand name.</p>
+        <p class="lead">Run the meta study as an evidence map plus narrative synthesis, with the reading and marking done in house.</p>
+        <p>Then meet the two duties in full: state that we used AI and where, and spend about half a day marking a sample by hand to report how often it agreed. That is what makes the method defensible to anyone who pushes on it, and it is a more rigorous thing to put in a methods note than a brand name.</p>
       </div>
-      <h3>MAXQDA is second, and becomes first only if all of these hold</h3>
+      <h4>MAXQDA is second, and becomes first only if all of these hold</h4>
       <ul>
         <li>Michelle judges that the audience needs to see a software brand in the methods note</li>
         <li>Scope is narrow, because broad scope puts the corpus beyond the tool's quota</li>
@@ -298,19 +324,44 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 <section>
   <div class="row">
-    <div class="lbl">Asks</div>
+    <div class="lbl">Questions</div>
     <div>
-      <h2>What we need decided today</h2>
+      <h2>What we need answered today</h2>
+      <p>Six questions, in the order worth asking them. The first one blocks everything else.</p>
       <div class="scroll">
-      <table>
-        <thead><tr><th></th><th>Decision</th><th>Why it is blocking</th></tr></thead>
+      <table class="qs">
+        <thead><tr><th></th><th>The question</th><th>Why we need the answer</th></tr></thead>
         <tbody>
-          <tr><td class="num">1</td><td><strong>Narrow or broad scope</strong></td><td>Open since 5 August. Nothing gets drafted until it is answered, and it also decides whether any tool is usable.</td></tr>
-          <tr><td class="num">2</td><td><strong>Approve the method</strong></td><td>Evidence map plus narrative synthesis, AI use reported under RAISE.</td></tr>
-          <tr><td class="num">3</td><td><strong>Whether a software brand name is worth a week</strong></td><td>The only remaining reason to buy a tool, and it is a judgment about the audience that Michelle is better placed to make.</td></tr>
-          <tr><td class="num">4</td><td><strong>Approve the seven sections</strong></td><td>Her own brief of 5 August turned into an outline, never signed off.</td></tr>
-          <tr><td class="num">5</td><td><strong>The Alliance Bioversity Putumayo cacao study</strong></td><td>Came through her and never reached the shared drive.</td></tr>
-          <tr><td class="num">6</td><td><strong>One day to contact the ten organisations skipped in June</strong></td><td>Six are free public downloads. This is the largest single lever on memo quality, ahead of any software.</td></tr>
+          <tr>
+            <td class="n">1</td>
+            <td class="q"><span class="topic">Scope</span><span class="say">Should the memo cover cacao in Ecuador, Colombia and Peru, where we hold real trade data, or the whole Andean bioeconomy built on other organisations' figures?</span></td>
+            <td class="why">Open since 5 August, and nothing gets drafted until it is answered. It also decides whether any software is usable at all, since the broad version puts the corpus beyond every tool's quota. We recommend the narrower one.</td>
+          </tr>
+          <tr>
+            <td class="n">2</td>
+            <td class="q"><span class="topic">Method</span><span class="say">Are you happy for us to run this as an evidence map plus narrative synthesis, following published guidance, with our use of AI documented and a sample checked by hand?</span></td>
+            <td class="why">This is the methodology sentence that goes in the memo and gets quoted if anyone asks how the work was done.</td>
+          </tr>
+          <tr>
+            <td class="n">3</td>
+            <td class="q"><span class="topic">Software</span><span class="say">Does the audience for this memo need to see a recognised software name in the methods section? If yes we take MAXQDA through Yale and it adds about a week. If no, we start today.</span></td>
+            <td class="why">The only remaining reason to buy anything. It is a judgment about who reads this and what they expect, which Michelle is better placed to make than we are.</td>
+          </tr>
+          <tr>
+            <td class="n">4</td>
+            <td class="q"><span class="topic">Structure</span><span class="say">Do the seven sections in the outline match what you want, or would you change any of them?</span></td>
+            <td class="why">Her own brief of 5 August turned into an outline, never signed off. Drafting cannot start against an unapproved structure.</td>
+          </tr>
+          <tr>
+            <td class="n">5</td>
+            <td class="q"><span class="topic">Missing source</span><span class="say">Could you send the Alliance Bioversity Putumayo cacao study? It came through you and never reached the shared drive.</span></td>
+            <td class="why">A known gap in the corpus that only she can close, and it costs her one forward.</td>
+          </tr>
+          <tr>
+            <td class="n">6</td>
+            <td class="q"><span class="topic">Time</span><span class="say">Can I spend one day contacting the ten organisations we never reached in June? Six of them are free public downloads.</span></td>
+            <td class="why">The largest single lever on the quality of this memo, ahead of any software decision. Without it the search is incomplete and we have to say so in the limitations.</td>
+          </tr>
         </tbody>
       </table>
       </div>
@@ -330,12 +381,14 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
         <dd>Going through the documents and marking every spot that answers one of our questions, tagging it with which question it answered.</dd>
         <dt>Corpus</dt>
         <dd>The pile of documents. Ours is ninety six.</dd>
+        <dt>Synthesis</dt>
+        <dd>Combining what many separate studies say into one account, including the places where they disagree.</dd>
         <dt>Validation</dt>
         <dd>Checking the AI's work. We mark fifty passages by hand, compare against what the AI marked, and report how often the two agreed.</dd>
         <dt>Grey literature</dt>
         <dd>Reports, strategies and diagnostics published by organisations rather than academic journals. Almost everything we hold is this, and most of it is in Spanish.</dd>
-        <dt>Synthesis</dt>
-        <dd>Combining what many separate studies say into one account, including the places where they disagree.</dd>
+        <dt>RAISE</dt>
+        <dd>The 2025 rules for using AI in this kind of study, published jointly by the four organisations that set the standards. It permits AI, requires you to say what you used, and requires you to check a sample by hand.</dd>
       </dl>
     </div>
   </div>
@@ -346,11 +399,11 @@ a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
     <div class="lbl">Evidence</div>
     <div>
       <h2>What is verified and what is not</h2>
-      <h3>Confirmed against primary sources</h3>
+      <h4>Confirmed against primary sources</h4>
       <p>Narrative synthesis and its four elements are Popay, Roberts, Sowden, Petticrew, Arai, Rodgers, Britten, Roen and Duffy, ESRC Methods Programme, 2006. The Cochrane, Campbell, JBI and Collaboration for Environmental Evidence position statement endorses RAISE, permits AI for extraction, coding and synthesis, and mandates no specific software. MAXQDA codes one code per request and does not require manual highlighting first, from its own help documentation. Multi document coding requires the paid tier, described as more than about 1,000 pages daily with a limit that resets each day, priced from 132 euro net per year.</p>
-      <h3>Measured from our own corpus</h3>
-      <p>106 extracted text files, 20.55 million characters. 12.76 million once Michelle's Ecuador cacao export file is set aside, that file alone being 7.79 million characters of transactional data rather than narrative. Median document about 92,000 characters. 81 of 106 files mention cacao. 2,575 twelve word passages appear in more than one document.</p>
-      <h3>Not confirmed, do not assert</h3>
+      <h4>Measured from our own corpus</h4>
+      <p>106 extracted text files, 20.55 million characters. 12.76 million once Michelle's Ecuador cacao export file is set aside, that file alone being 7.79 million characters of transactional data rather than narrative. Median document about 92,000 characters. 81 of 106 files mention cacao. 2,575 twelve word passages appear in more than one document. The cacao yield figures in the worked example were read directly out of the narrative documents this morning.</p>
+      <h4>Not confirmed, do not assert</h4>
       <p>Whether Yale holds MAXQDA or ATLAS.ti, and whether a licence would cover a contractor on an IMPAQTO project. How MAXQDA counts a page. ATLAS.ti's limits. Whether the 69 documents we retrieved ourselves carry structured data, which is the open item that could still move the narrow recommendation.</p>
       <div class="hair"></div>
       <p class="src">
